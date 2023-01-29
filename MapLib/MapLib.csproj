@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
+	<Authors>Tom</Authors>
+    <ImplicitUsings>disable</ImplicitUsings>
+	<LangVersion>10.0</LangVersion>
+    <Nullable>enable</Nullable>
+	<AssemblyVersion>$(Version)</AssemblyVersion>
+	<FileVersion>$(Version)</FileVersion>
+	<Version>1.0.0</Version>
+	<Copyright>Copyright © 2023 Tom</Copyright>
+	<Description>🌏 实用的地图空间计算/桩号/车道级</Description>
+	<PackageId>MapLib</PackageId>
+	<PackageIcon>Logo.png</PackageIcon>
+	<RepositoryUrl>https://github.com/Haku-Men/MapLib</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>map;geo;MapLib</PackageTags>
+	<PackageReleaseNotes></PackageReleaseNotes>
+	<PackageProjectUrl>https://github.com/Haku-Men/MapLib</PackageProjectUrl>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+	  <None Include="..\Logo.png" Pack="true" PackagePath="" />
+	  <None Include="..\README.md" Pack="true" PackagePath="" />
+	  <None Include="..\LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>
