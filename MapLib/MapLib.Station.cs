@@ -270,20 +270,16 @@ namespace MapLib
             if (m >= 1000)
             {
                 string mstr = Math.Round(m / 1000.0, 3).ToString();
-                if (mstr.Contains("."))
+                if (mstr.Contains(join))
                 {
-                    int index = mstr.LastIndexOf('.');
+                    int index = mstr.LastIndexOf(join);
                     return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
                 }
                 else
-                {
-                    return "K." + mstr + "+000";
-                }
+                    return "K." + mstr + join + "000";
             }
             else
-            {
-                return "K0+" + m.ToString().PadLeft(3, '0');
-            }
+                return "K0" + join + m.ToString().PadLeft(3, '0');
         }
 
         /// <summary>
@@ -296,21 +292,17 @@ namespace MapLib
         {
             if (m >= 1000)
             {
-                string mstr = Math.Round(m / 1000, 3).ToString();
-                if (mstr.Contains("."))
+                string mstr = Math.Round(m / 1000.0, 3).ToString();
+                if (mstr.Contains(join))
                 {
-                    int index = mstr.LastIndexOf('.');
+                    int index = mstr.LastIndexOf(join);
                     return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
                 }
                 else
-                {
-                    return "K." + mstr + "+000";
-                }
+                    return "K." + mstr + join + "000";
             }
             else
-            {
-                return "K0+" + Math.Round(m, 0).ToString().PadLeft(3, '0');
-            }
+                return "K0" + join + m.ToString().PadLeft(3, '0');
         }
 
         #endregion
