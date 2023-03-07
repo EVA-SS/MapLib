@@ -8,7 +8,7 @@
     <Nullable>enable</Nullable>
 	<AssemblyVersion>$(Version)</AssemblyVersion>
 	<FileVersion>$(Version)</FileVersion>
-	<Version>1.0.1</Version>
+	<Version>1.0.2</Version>
 	<Copyright>Copyright © 2023 Tom</Copyright>
 	<Description>🌏 实用的地图空间计算/桩号/车道级</Description>
 	<PackageId>MapLib</PackageId>

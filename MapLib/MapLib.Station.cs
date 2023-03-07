@@ -254,6 +254,7 @@ namespace MapLib
                     index = _m.LastIndexOf(".");
                 if (int.TryParse(_m.Substring(0, index), out int _km_) && int.TryParse(_m.Substring(index + 1), out int _m_))
                     return _km_ * 1000 + _m_;
+                else return deVal;
             }
             if (int.TryParse(_m, out int _value)) return _value;
             return deVal;
@@ -270,9 +271,9 @@ namespace MapLib
             if (m >= 1000)
             {
                 string mstr = Math.Round(m / 1000.0, 3).ToString();
-                if (mstr.Contains(join))
+                if (mstr.Contains("."))
                 {
-                    int index = mstr.LastIndexOf(join);
+                    int index = mstr.LastIndexOf(".");
                     return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
                 }
                 else
@@ -293,9 +294,9 @@ namespace MapLib
             if (m >= 1000)
             {
                 string mstr = Math.Round(m / 1000.0, 3).ToString();
-                if (mstr.Contains(join))
+                if (mstr.Contains("."))
                 {
-                    int index = mstr.LastIndexOf(join);
+                    int index = mstr.LastIndexOf(".");
                     return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
                 }
                 else
