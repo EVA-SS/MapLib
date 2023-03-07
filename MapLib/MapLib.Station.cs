@@ -277,7 +277,7 @@ namespace MapLib
                     return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
                 }
                 else
-                    return "K." + mstr + join + "000";
+                    return "K" + mstr + join + "000";
             }
             else
                 return "K0" + join + m.ToString().PadLeft(3, '0');
@@ -300,7 +300,7 @@ namespace MapLib
                     return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
                 }
                 else
-                    return "K." + mstr + join + "000";
+                    return "K" + mstr + join + "000";
             }
             else
                 return "K0" + join + m.ToString().PadLeft(3, '0');
