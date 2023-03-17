@@ -71,15 +71,19 @@ namespace MapLib
         /// </summary>
         /// <param name="lng">经度</param>
         /// <param name="lat">纬度</param>
-        /// <param name="tag">附加</param>
-        public LngLatTag(double lng, double lat, object tag) : base(lng, lat)
+        /// <param name="_m">桩号</param>
+        /// <param name="_tag">附加</param>
+        public LngLatTag(double lng, double lat, int _m, object _tag) : base(lng, lat)
         {
-            this.tag = tag;
+            m = _m;
+            tag = _tag;
         }
-        public LngLatTag(LngLat lnglat, object tag) : base(lnglat)
+        public LngLatTag(LngLat lnglat, int _m, object _tag) : base(lnglat)
         {
-            this.tag = tag;
+            m = _m;
+            tag = _tag;
         }
+        public int m { get; set; }
 
         public object tag { get; set; }
     }

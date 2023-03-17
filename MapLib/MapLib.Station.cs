@@ -268,19 +268,14 @@ namespace MapLib
         /// <returns>桩号文本</returns>
         public static string StationToStr(this int m, string join = ".")
         {
-            if (m >= 1000)
+            string mstr = Math.Round(m / 1000.0, 3).ToString();
+            if (mstr.Contains("."))
             {
-                string mstr = Math.Round(m / 1000.0, 3).ToString();
-                if (mstr.Contains("."))
-                {
-                    int index = mstr.LastIndexOf(".");
-                    return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
-                }
-                else
-                    return "K" + mstr + join + "000";
+                int index = mstr.LastIndexOf(".");
+                return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
             }
             else
-                return "K0" + join + m.ToString().PadLeft(3, '0');
+                return "K" + mstr + join + "000";
         }
 
         /// <summary>
@@ -291,19 +286,14 @@ namespace MapLib
         /// <returns>桩号文本</returns>
         public static string StationToStr(this double m, string join = ".")
         {
-            if (m >= 1000)
+            string mstr = Math.Round(m / 1000.0, 3).ToString();
+            if (mstr.Contains("."))
             {
-                string mstr = Math.Round(m / 1000.0, 3).ToString();
-                if (mstr.Contains("."))
-                {
-                    int index = mstr.LastIndexOf(".");
-                    return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
-                }
-                else
-                    return "K" + mstr + join + "000";
+                int index = mstr.LastIndexOf(".");
+                return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
             }
             else
-                return "K0" + join + m.ToString().PadLeft(3, '0');
+                return "K" + mstr + join + "000";
         }
 
         #endregion

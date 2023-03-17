@@ -263,7 +263,7 @@ namespace MapLib
         /// <param name="lat">纬度</param>
         public static bool IsInChina(double lng, double lat)
         {
-            if ((lng < 72.004 || lng > 137.8347) ||(lat < 0.8293 || lat > 55.8271))
+            if ((lng < 72.004 || lng > 137.8347) || (lat < 0.8293 || lat > 55.8271))
                 return true;
             return false;
         }

@@ -101,34 +101,23 @@ namespace MapLib
         /// 计算点与最接近的线
         /// </summary>
         /// <param name="current">当前点</param>
-        /// <param name="differ">相差（米）</param>
         /// <param name="line"></param>
-        public static LngLatTag Distance(this LngLat current, out double differ, List<LngLatTag> line)
+        /// <param name="station">桩号</param>
+        public static LngLatTag? Distance(this LngLat current, List<LngLatTag> line, out int? station)
         {
             try
             {
                 var lnglatMs = new List<LngLatM>();
-                foreach (var item in line)
-                {
-                    lnglatMs.Add(new LngLatM(current.Distance(item), item));
-                }
-                if (lnglatMs.Count > 0)
-                {
-                    if (lnglatMs.Count > 1)
-                    {
-                        var find = lnglatMs.OrderBy(x => x.m).First();
-                        differ = find.m;
-                        return find.lnglat;
-                    }
-                    else
-                    {
-                        differ = lnglatMs[0].m;
-                        return lnglatMs[0].lnglat;
-                    }
-                }
+                foreach (var item in line) lnglatMs.Add(new LngLatM(current.Distance(item), item));
+                var _lnglatMs = lnglatMs.OrderBy(x => x.m);
+                var find = _lnglatMs.First();//最近点
+                var find2 = _lnglatMs.Take(2).Last();//第二点
+                if (find.lnglat.m > find2.lnglat.m) station = (int)Math.Round(find.lnglat.m - find.m);
+                else station = (int)Math.Round(find.lnglat.m + find.m);
+                return find.lnglat;
             }
             catch { }
-            differ = -1;
+            station = null;
             return null;
         }
 
