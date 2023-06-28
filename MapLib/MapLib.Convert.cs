@@ -28,23 +28,23 @@ namespace MapLib
         public static double[][] LineToRegion(this double[][] line, double range = 10)
         {
             List<double[]> result = new List<double[]>(), result_l = new List<double[]>(), result_r = new List<double[]>();
-            for (int i = 0; i < line.Length; i++)
+            double[]? old = null;
+            for (int i = 1; i < line.Length; i++)
             {
-                if (i == line.Length - 1)
+                double[] lineold = line[i - 1], linenew = line[i];
+                if (old == null || (old[0] != linenew[0] || old[1] != linenew[1]))
                 {
-                    double[] lineold = line[i - 1], linenew = line[i];
-                    LngLat _old = new LngLat(lineold), _new = new LngLat(linenew);
-                    var angle = Azimuth(_old, _new);
-                    result_l.Add(Destination(_new, angle - 90, range).ToDouble());
-                    result_r.Insert(0, Destination(_new, angle + 90, range).ToDouble());
-                }
-                else
-                {
-                    double[] lineold = line[i], linenew = line[i + 1];
+                    old = linenew;
                     LngLat _old = new LngLat(lineold), _new = new LngLat(linenew);
                     var angle = Azimuth(_old, _new);
                     result_l.Add(Destination(_old, angle - 90, range).ToDouble());
                     result_r.Insert(0, Destination(_old, angle + 90, range).ToDouble());
+
+                    if (i == line.Length - 1)
+                    {
+                        result_l.Add(Destination(_new, angle - 90, range).ToDouble());
+                        result_r.Insert(0, Destination(_new, angle + 90, range).ToDouble());
+                    }
                 }
             }
             result.AddRange(result_l);
