@@ -70,14 +70,18 @@ namespace MapLib
         /// <returns>米</returns>
         public static double Distance(this List<double[]> lines)
         {
-            var s = lines[0];
-            double total = 0;
-            for (int i = 1; i < lines.Count; i++)
+            if (lines.Count > 0)
             {
-                total += Distance(s, lines[i]);
-                s = lines[i];
+                var s = lines[0];
+                double total = 0;
+                for (int i = 1; i < lines.Count; i++)
+                {
+                    total += Distance(s, lines[i]);
+                    s = lines[i];
+                }
+                return total;
             }
-            return total;
+            return 0;
         }
 
         /// <summary>
@@ -103,7 +107,7 @@ namespace MapLib
         /// <param name="current">当前点</param>
         /// <param name="line"></param>
         /// <param name="station">桩号</param>
-        public static LngLatTag? Distance(this LngLat current, List<LngLatTag> line, out int? station)
+        public static LngLatTag? Distance(this LngLat current, IList<LngLatTag> line, out int? station)
         {
             try
             {

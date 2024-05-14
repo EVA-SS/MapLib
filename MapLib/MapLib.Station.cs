@@ -16,6 +16,197 @@ namespace MapLib
 {
     public static partial class Map
     {
+        #region NEW
+
+        /// <summary>
+        /// 计算桩号（全平均）
+        /// </summary>
+        /// <param name="lines">线</param>
+        /// <param name="m">间隔（米）</param>
+        /// <param name="station">自定义桩号位置</param>
+        /// <returns>桩号集合</returns>
+        public static List<RoadStation> Station(this double[][] lines, int m, List<RoadStation> station)
+        {
+            var list = new List<RoadStation>();
+            RoadStation first = station[0], last = station[station.Count - 1];
+
+            var lines_dense = LineDense(lines, lines.Distance() / 3);//更密的线
+            lines_dense = LineFillStation(lines_dense, station);
+            int start_tmp = 0;
+            if (last.m > first.m)
+            {
+                //桩号正向
+                for (int i = 1; i < station.Count; i++)
+                {
+                    start_tmp = lines_dense.LineSubstring(start_tmp, station[i], out var line);
+                    if (line.Count > 0)
+                    {
+                        list.AddRange(StationAVG(line, station[i - 1].m, station[i].m, m));
+                    }
+                }
+            }
+            else
+            {
+                //桩号反向
+                for (int i = 1; i < station.Count; i++)
+                {
+                    start_tmp = lines_dense.LineSubstring(start_tmp, station[i], out var line);
+                    list.AddRange(StationAVGJ(line, station[i - 1].m, station[i].m, m));
+                }
+            }
+            return list;
+        }
+
+        static List<RoadStation> StationAVG(List<double[]> line, int s, int t, int m)
+        {
+            int sm = s;
+            var list = new List<RoadStation>();
+            double old = 0, total = line.Distance();
+            double mo = total / ((t - s) / m);
+            double[] firt = line[0];
+            for (int i = 1; i < line.Count; i++)
+            {
+                var e = line[i];
+                old += Distance(firt, e);
+                if (old >= mo)
+                {
+                    old = 0;
+                    sm += m;
+                    list.Add(new RoadStation(e, sm));
+                }
+                firt = e;
+            }
+            return list;
+        }
+        static List<RoadStation> StationAVGJ(List<double[]> line, int s, int t, int m)
+        {
+            int sm = s;
+            var list = new List<RoadStation>();
+            double old = 0, total = line.Distance();
+            double mo = total / ((s - t) / m);
+            double[] firt = line[0];
+            for (int i = 1; i < line.Count; i++)
+            {
+                var e = line[i];
+                old += Distance(firt, e);
+                if (old >= mo)
+                {
+                    old = 0;
+                    sm -= m;
+                    list.Add(new RoadStation(e, sm));
+                }
+                firt = e;
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 桩号填充到线里
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <param name="m">密度（米）</param>
+        /// <param name="station">自定义桩号位置</param>
+        static List<double[]> LineFillStation(List<double[]> lines, List<RoadStation> station)
+        {
+            var dir = new Dictionary<int, RoadStation>(station.Count - 2);
+            for (int i = 1; i < station.Count - 1; i++)
+            {
+                var et = station[i];
+                var result = new List<SortLine>(lines.Count);
+                var etg = new double[] { et.lng, et.lat };
+                double max = double.MaxValue;
+                for (int j = 0; j < lines.Count; j++)
+                {
+                    var d = Distance(lines[j], etg);
+                    if (d > max) continue;
+                    max = d;
+                    result.Add(new SortLine { d = d, i = j });
+                }
+                result.Sort((x, y) =>
+                {
+                    if (x.d == y.d) return 0;
+                    else if (x.d > y.d) return 1;
+                    else return -1;
+                });
+                int index = result[0].i;
+                if (index > 0)
+                {
+                    bool add = true;
+                    try
+                    {
+                        var d = Distance(etg, lines[index + 1]);
+                        if (d < result[0].d) add = false;
+                    }
+                    catch
+                    {
+                        //try
+                        //{
+                        //    var d = Distance(etg, lines[index - 1]);
+                        //    if (d > result[0].d) add = false;
+                        //}
+                        //catch
+                        //{
+                        //}
+                    }
+                    try
+                    {
+                        if (add) dir.Add(index, et);
+                        else dir.Add(index - 1, et);
+                    }
+                    catch { }
+                }
+                else dir.Add(index, et);
+            }
+
+            var gpss = new List<double[]>(lines.Count + dir.Count);
+            gpss.AddRange(lines);
+            int sindex = 0;
+            foreach (var item in dir)
+            {
+                gpss.Insert(item.Key + sindex, new double[] { item.Value.lng, item.Value.lat });
+                sindex++;
+            }
+            return gpss;
+
+        }
+
+        /// <summary>
+        /// 截取线
+        /// </summary>
+        /// <param name="lines">线</param>
+        /// <param name="st">开始位置</param>
+        /// <param name="et">结束位置</param>
+        static int LineSubstring(this List<double[]> lines, int st, RoadStation et, out List<double[]> lins)
+        {
+            double max = double.MaxValue;
+            var result = new List<SortLine>(lines.Count - st);
+            for (int i = st; i < lines.Count; i++)
+            {
+                var d = Distance(lines[i], new double[] { et.lng, et.lat });
+                if (d > max) continue;
+                max = d;
+                result.Add(new SortLine { d = d, i = i });
+            }
+            result.Sort((x, y) =>
+            {
+                if (x.d == y.d) return 0;
+                else if (x.d > y.d) return 1;
+                else return -1;
+            });
+            int index = result[0].i;
+            lins = new List<double[]>(index - st);
+            for (int i = st; i < index; i++) lins.Add(lines[i]);
+            return index;
+        }
+
+        internal class SortLine
+        {
+            public double d { get; set; }
+            public int i { get; set; }
+        }
+
+        #endregion
+
         /// <summary>
         /// 计算桩号
         /// </summary>
@@ -29,7 +220,7 @@ namespace MapLib
         {
             if (direction)
             {
-                var _lines = new List<double[]>();
+                var _lines = new List<double[]>(lines.Length);
                 foreach (var item in lines) _lines.Insert(0, item);
                 lines = _lines.ToArray();
             }
@@ -59,24 +250,32 @@ namespace MapLib
                     {
                         return x.distance.CompareTo(y.distance);
                     });
-                    tempos.Add(new RoadStations
+                    var line_tmp = arrs.LineSubstring(start_index, mins[0].index);
+                    if (line_tmp.Count > 0)
                     {
-                        lines = arrs.LineSubstring(start_index, mins[0].index),
-                        length = len,
-                        st = start_station,
-                        et = item.m
-                    });
+                        tempos.Add(new RoadStations
+                        {
+                            lines = line_tmp,
+                            length = len,
+                            st = start_station,
+                            et = item.m
+                        });
+                    }
                     start_station = item.m;
                     start_index = mins[0].index - 1;
                 }
 
-                tempos.Add(new RoadStations
+                var line_tmp2 = arrs.LineSubstring(start_index, arrs.Count);
+                if (line_tmp2.Count > 0)
                 {
-                    lines = arrs.LineSubstring(start_index, arrs.Count),
-                    length = -1,
-                    st = start_station,
-                    et = -1
-                });
+                    tempos.Add(new RoadStations
+                    {
+                        lines = line_tmp2,
+                        length = -1,
+                        st = start_station,
+                        et = -1
+                    });
+                }
 
                 //开始平均
                 list.AddRange(StationAuto(tempos, m, sm));
