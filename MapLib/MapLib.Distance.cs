@@ -1,8 +1,8 @@
 ﻿//------------------------------------------------------------------------------
 //  此代码版权（除特别声明或在MapLib命名空间的代码）归作者本人Tom所有
 //  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  Github源代码仓库：https://github.com/Haku-Men
-//  Gitee源代码仓库：https://gitee.com/HakuMen
+//  Github源代码仓库：https://github.com/EVA-SS/MapLib
+//  Gitee源代码仓库：https://gitee.com/EVA-SS/MapLib
 //  QQ：17379620
 //  参考公式：http://www.movable-type.co.uk/scripts/latlong.html
 //  感谢您的下载和使用
@@ -23,10 +23,7 @@ namespace MapLib
         /// <param name="lnglat">第一个坐标</param>
         /// <param name="lnglat2">第二个坐标</param>
         /// <returns>两个坐标之间的距离</returns>
-        public static double Distance(this LngLat lnglat, LngLat lnglat2)
-        {
-            return Distance(lnglat.lng, lnglat.lat, lnglat2.lng, lnglat2.lat);
-        }
+        public static double Distance(this LngLat lnglat, LngLat lnglat2) => Distance(lnglat.lng, lnglat.lat, lnglat2.lng, lnglat2.lat);
 
         /// <summary>
         /// 获取两点之间的距离
@@ -34,10 +31,7 @@ namespace MapLib
         /// <param name="lnglat">第一个经纬度</param>
         /// <param name="lnglat2">第二个经纬度</param>
         /// <returns>米</returns>
-        public static double Distance(this double[] lnglat, double[] lnglat2)
-        {
-            return Distance(lnglat[0], lnglat[1], lnglat2[0], lnglat2[1]);
-        }
+        public static double Distance(this double[] lnglat, double[] lnglat2) => Distance(lnglat[0], lnglat[1], lnglat2[0], lnglat2[1]);
 
         /// <summary>
         /// 获取两点之间的距离
@@ -51,10 +45,9 @@ namespace MapLib
         {
             try
             {
-                var b = Math.PI / 180;
-                var c = Math.Sin((lat2 - lat) * b / 2);
-                var d = Math.Sin((lng2 - lng) * b / 2);
-                var a = c * c + d * d * Math.Cos(lat2 * b) * Math.Cos(lat2 * b);
+                var c = Math.Sin((lat2 - lat) * PI180 / 2);
+                var d = Math.Sin((lng2 - lng) * PI180 / 2);
+                var a = c * c + d * d * Math.Cos(lat2 * PI180) * Math.Cos(lat2 * PI180);
                 return 12756274 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
             }
             catch
@@ -74,13 +67,15 @@ namespace MapLib
             {
                 var s = lines[0];
                 double total = 0;
-                for (int i = 1; i < lines.Count; i++)
+                for (int i = 1;i < lines.Count;i++)
                 {
                     total += Distance(s, lines[i]);
                     s = lines[i];
                 }
+
                 return total;
             }
+
             return 0;
         }
 
@@ -93,11 +88,12 @@ namespace MapLib
         {
             var s = lines[0];
             double total = 0;
-            for (int i = 1; i < lines.Length; i++)
+            for (int i = 1;i < lines.Length;i++)
             {
                 total += Distance(s, lines[i]);
                 s = lines[i];
             }
+
             return total;
         }
 
@@ -114,20 +110,28 @@ namespace MapLib
                 var lnglatMs = new List<LngLatM>();
                 foreach (var item in line) lnglatMs.Add(new LngLatM(current.Distance(item), item));
                 var _lnglatMs = lnglatMs.OrderBy(x => x.m);
-                var find = _lnglatMs.First();//最近点
-                var find2 = _lnglatMs.Take(2).Last();//第二点
+                var find = _lnglatMs.First(); //最近点
+                var find2 = _lnglatMs.Take(2).Last(); //第二点
                 if (find.lnglat.m > find2.lnglat.m) station = (int)Math.Round(find.lnglat.m - find.m);
                 else station = (int)Math.Round(find.lnglat.m + find.m);
                 return find.lnglat;
             }
-            catch { }
+            catch
+            {
+            }
+
             station = null;
             return null;
         }
 
         class LngLatM
         {
-            public LngLatM(double m, LngLatTag _lnglat) { this.m = m; lnglat = _lnglat; }
+            public LngLatM(double _m, LngLatTag _lnglat)
+            {
+                m = _m;
+                lnglat = _lnglat;
+            }
+
             public double m { get; set; }
             public LngLatTag lnglat { get; set; }
         }

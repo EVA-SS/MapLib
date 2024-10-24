@@ -1,8 +1,8 @@
 ﻿//------------------------------------------------------------------------------
 //  此代码版权（除特别声明或在MapLib命名空间的代码）归作者本人Tom所有
 //  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  Github源代码仓库：https://github.com/Haku-Men
-//  Gitee源代码仓库：https://gitee.com/HakuMen
+//  Github源代码仓库：https://github.com/EVA-SS/MapLib
+//  Gitee源代码仓库：https://gitee.com/EVA-SS/MapLib
 //  QQ：17379620
 //  参考公式：http://www.movable-type.co.uk/scripts/latlong.html
 //  感谢您的下载和使用
@@ -30,7 +30,7 @@ namespace MapLib
             if (paths.Count < 3) return false;//点小于3无法构成多边形
             int iSum = 0;
             int pathCount = paths.Count;
-            for (int i = 0; i < pathCount; i++)
+            for (int i = 0;i < pathCount;i++)
             {
                 int nextIndex = i + 1;
                 if (i == pathCount - 1) nextIndex = 0;
@@ -60,7 +60,7 @@ namespace MapLib
             if (paths.Count < 3) return false;//点小于3无法构成多边形
             int iSum = 0;
             int pathCount = paths.Count;
-            for (int i = 0; i < pathCount; i++)
+            for (int i = 0;i < pathCount;i++)
             {
                 int nextIndex = i + 1;
                 if (i == pathCount - 1) nextIndex = 0;
