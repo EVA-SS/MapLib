@@ -41,7 +41,7 @@ namespace MapLib
             double lng_start_rad = lng_start * PI180, lat_start_rad = lat_start * PI180, lng_end_rad = lng_end * PI180, lat_end_rad = lat_end * PI180;
 
             double y = Math.Sin(lng_end_rad - lng_start_rad) * Math.Cos(lat_end_rad), x = Math.Cos(lat_start_rad) * Math.Sin(lat_end_rad) - Math.Sin(lat_start_rad) * Math.Cos(lat_end_rad) * Math.Cos(lng_end_rad - lng_start_rad);
-            var brng = Math.Atan2(y, x) * 180 / PI180;
+            var brng = Math.Atan2(y, x) * 180 / PI;
             return (brng + 360.0) % 360.0;
         }
 
@@ -77,7 +77,7 @@ namespace MapLib
             double lng_rad = lng * PI180, lat_rad = lat * PI180;
             double brng = bearing * PI180;
             double _lat = Math.Asin(Math.Sin(lat_rad) * Math.Cos(m / radius) + Math.Cos(lat_rad) * Math.Sin(m / radius) * Math.Cos(brng)), _lng = lng_rad + Math.Atan2(Math.Sin(brng) * Math.Sin(m / radius) * Math.Cos(lat_rad), Math.Cos(m / radius) - Math.Sin(lat_rad) * Math.Sin(_lat));
-            return new LngLat(_lng * (180 / PI180), _lat * (180 / PI180));
+            return new LngLat(_lng * (180 / PI), _lat * (180 / PI));
         }
     }
 }
