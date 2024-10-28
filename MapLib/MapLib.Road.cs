@@ -1,20 +1,9 @@
-﻿//------------------------------------------------------------------------------
-//  此代码版权（除特别声明或在MapLib命名空间的代码）归作者本人Tom所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  Github源代码仓库：https://github.com/EVA-SS/MapLib
-//  Gitee源代码仓库：https://gitee.com/EVA-SS/MapLib
-//  QQ：17379620
-//  参考公式：http://www.movable-type.co.uk/scripts/latlong.html
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace MapLib
 {
-    public static partial class Map
+    static partial class Map
     {
         /// <summary>
         /// 判断是否偏离航线
@@ -22,10 +11,10 @@ namespace MapLib
         /// <param name="point">实时点用于判断此点是否偏离航线</param>
         /// <param name="points">航线组成的点坐标</param>
         /// <returns>距离多少m（可自行判断阈值）</returns>
-        public static double PointToPintLine(this LngLat point, List<LngLat> points)
+        public static double PointToPintLine(this LngLat point, IList<LngLat> points)
         {
             double minDistance = -1;
-            for (int i = 0;i < points.Count - 1;i++)
+            for (int i = 0; i < points.Count - 1; i++)
             {
                 if (points[i].lng == points[i + 1].lng && points[i].lat == points[i + 1].lat) continue;
                 //获取线段的x取值范围和Y的取值范围

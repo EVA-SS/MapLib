@@ -1,15 +1,4 @@
-﻿//------------------------------------------------------------------------------
-//  此代码版权（除特别声明或在MapLib命名空间的代码）归作者本人Tom所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  Github源代码仓库：https://github.com/EVA-SS/MapLib
-//  Gitee源代码仓库：https://gitee.com/EVA-SS/MapLib
-//  QQ：17379620
-//  参考公式：http://www.movable-type.co.uk/scripts/latlong.html
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 
 namespace MapLib
 {
@@ -23,39 +12,35 @@ namespace MapLib
         /// <summary>
         /// 计算方位角
         /// </summary>
-        /// <param name="lnglat_start">起始点</param>
-        /// <param name="lnglat_end">目标点</param>
-        /// <remarks>根据起始点经纬度、目标点经纬度计算它们之间的方位角</remarks>
-        /// <returns>方位角</returns>
-        public static double Azimuth(this LngLat lnglat_start, LngLat lnglat_end) => Azimuth(lnglat_start.lng, lnglat_start.lat, lnglat_end.lng, lnglat_end.lat);
+        /// <param name="start">起点</param>
+        /// <param name="end">终点</param>
+        /// <remarks>根据起点经纬度、终点经纬度计算它们之间的方位角</remarks>
+        /// <returns>两点的方位角</returns>
+        public static double Azimuth(this LngLat start, LngLat end) => Azimuth(start.lng, start.lat, end.lng, end.lat);
 
         /// <summary>
         /// 计算方位角
         /// </summary>
-        /// <param name="lnglat_start">起始点</param>
-        /// <param name="lnglat_end">目标点</param>
-        /// <remarks>根据起始点经纬度、目标点经纬度计算它们之间的方位角</remarks>
-        /// <returns>方位角</returns>
-        public static double Azimuth(this double[] lnglat_start, double[] lnglat_end) => Azimuth(lnglat_start[0], lnglat_start[1], lnglat_end[0], lnglat_end[1]);
+        /// <param name="start">起点</param>
+        /// <param name="end">终点</param>
+        /// <remarks>根据起点经纬度、终点经纬度计算它们之间的方位角</remarks>
+        /// <returns>两点的方位角</returns>
+        public static double Azimuth(this double[] start, double[] end) => Azimuth(start[0], start[1], end[0], end[1]);
 
         /// <summary>
         /// 计算方位角
         /// </summary>
-        /// <param name="lng_start">起始 经度</param>
-        /// <param name="lat_start">起始 纬度</param>
-        /// <param name="lng_end">目标 经度</param>
-        /// <param name="lat_end">目标 纬度</param>
-        /// <remarks>根据起始点经纬度、目标点经纬度计算它们之间的方位角</remarks>
-        /// <returns>方位角</returns>
+        /// <param name="lng_start">起点 经度</param>
+        /// <param name="lat_start">起点 纬度</param>
+        /// <param name="lng_end">终点 经度</param>
+        /// <param name="lat_end">终点 纬度</param>
+        /// <remarks>根据起点经纬度、终点经纬度计算它们之间的方位角</remarks>
+        /// <returns>两点的方位角</returns>
         public static double Azimuth(double lng_start, double lat_start, double lng_end, double lat_end)
         {
-            double lng_start_rad = lng_start * PI180,
-                lat_start_rad = lat_start * PI180,
-                lng_end_rad = lng_end * PI180,
-                lat_end_rad = lat_end * PI180;
+            double lng_start_rad = lng_start * PI180, lat_start_rad = lat_start * PI180, lng_end_rad = lng_end * PI180, lat_end_rad = lat_end * PI180;
 
-            var y = Math.Sin(lng_end_rad - lng_start_rad) * Math.Cos(lat_end_rad);
-            var x = Math.Cos(lat_start_rad) * Math.Sin(lat_end_rad) - Math.Sin(lat_start_rad) * Math.Cos(lat_end_rad) * Math.Cos(lng_end_rad - lng_start_rad);
+            double y = Math.Sin(lng_end_rad - lng_start_rad) * Math.Cos(lat_end_rad), x = Math.Cos(lat_start_rad) * Math.Sin(lat_end_rad) - Math.Sin(lat_start_rad) * Math.Cos(lat_end_rad) * Math.Cos(lng_end_rad - lng_start_rad);
             var brng = Math.Atan2(y, x) * 180 / PI180;
             return (brng + 360.0) % 360.0;
         }
@@ -66,7 +51,7 @@ namespace MapLib
         /// <param name="current">当前经纬度</param>
         /// <param name="bearing">角度</param>
         /// <param name="m">里程（米）</param>
-        /// <returns>经纬度</returns>
+        /// <returns>通过目标点和角度得到经纬度</returns>
         public static LngLat Destination(this LngLat current, double bearing, double m) => Destination(current.lng, current.lat, bearing, m);
 
         /// <summary>
@@ -75,7 +60,7 @@ namespace MapLib
         /// <param name="current">当前经纬度</param>
         /// <param name="bearing">角度</param>
         /// <param name="m">里程（米）</param>
-        /// <returns>经纬度</returns>
+        /// <returns>通过目标点和角度得到经纬度</returns>
         public static LngLat Destination(this double[] current, double bearing, double m) => Destination(current[0], current[1], bearing, m);
 
         /// <summary>
@@ -85,7 +70,7 @@ namespace MapLib
         /// <param name="lat">当前纬度</param>
         /// <param name="bearing">角度</param>
         /// <param name="m">里程（米）</param>
-        /// <returns>经纬度</returns>
+        /// <returns>通过目标点和角度得到经纬度</returns>
         public static LngLat Destination(double lng, double lat, double bearing, double m)
         {
             var radius = 6371e3;

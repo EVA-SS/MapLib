@@ -1,20 +1,9 @@
-﻿//------------------------------------------------------------------------------
-//  此代码版权（除特别声明或在MapLib命名空间的代码）归作者本人Tom所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  Github源代码仓库：https://github.com/EVA-SS/MapLib
-//  Gitee源代码仓库：https://gitee.com/EVA-SS/MapLib
-//  QQ：17379620
-//  参考公式：http://www.movable-type.co.uk/scripts/latlong.html
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace MapLib
 {
-    public static partial class Map
+    static partial class Map
     {
         #region NEW
 
@@ -36,7 +25,7 @@ namespace MapLib
             if (last.m > first.m)
             {
                 //桩号正向
-                for (int i = 1;i < station.Count;i++)
+                for (int i = 1; i < station.Count; i++)
                 {
                     start_tmp = lines_dense.LineSubstring(start_tmp, station[i], out var line);
                     if (line.Count > 0)
@@ -48,7 +37,7 @@ namespace MapLib
             else
             {
                 //桩号反向
-                for (int i = 1;i < station.Count;i++)
+                for (int i = 1; i < station.Count; i++)
                 {
                     start_tmp = lines_dense.LineSubstring(start_tmp, station[i], out var line);
                     list.AddRange(StationAVGJ(line, station[i - 1].m, station[i].m, m));
@@ -64,7 +53,7 @@ namespace MapLib
             double old = 0, total = line.Distance();
             double mo = total / ((t - s) / m);
             double[] firt = line[0];
-            for (int i = 1;i < line.Count;i++)
+            for (int i = 1; i < line.Count; i++)
             {
                 var e = line[i];
                 old += Distance(firt, e);
@@ -85,7 +74,7 @@ namespace MapLib
             double old = 0, total = line.Distance();
             double mo = total / ((s - t) / m);
             double[] firt = line[0];
-            for (int i = 1;i < line.Count;i++)
+            for (int i = 1; i < line.Count; i++)
             {
                 var e = line[i];
                 old += Distance(firt, e);
@@ -109,13 +98,13 @@ namespace MapLib
         static List<double[]> LineFillStation(List<double[]> lines, List<RoadStation> station)
         {
             var dir = new Dictionary<int, RoadStation>(station.Count - 2);
-            for (int i = 1;i < station.Count - 1;i++)
+            for (int i = 1; i < station.Count - 1; i++)
             {
                 var et = station[i];
                 var result = new List<SortLine>(lines.Count);
                 var etg = new double[] { et.lng, et.lat };
                 double max = double.MaxValue;
-                for (int j = 0;j < lines.Count;j++)
+                for (int j = 0; j < lines.Count; j++)
                 {
                     var d = Distance(lines[j], etg);
                     if (d > max) continue;
@@ -180,7 +169,7 @@ namespace MapLib
         {
             double max = double.MaxValue;
             var result = new List<SortLine>(lines.Count - st);
-            for (int i = st;i < lines.Count;i++)
+            for (int i = st; i < lines.Count; i++)
             {
                 var d = Distance(lines[i], new double[] { et.lng, et.lat });
                 if (d > max) continue;
@@ -195,7 +184,7 @@ namespace MapLib
             });
             int index = result[0].i;
             lins = new List<double[]>(index - st);
-            for (int i = st;i < index;i++) lins.Add(lines[i]);
+            for (int i = st; i < index; i++) lins.Add(lines[i]);
             return index;
         }
 
@@ -237,7 +226,7 @@ namespace MapLib
                 {
                     var len = item.m - start_station;
                     var mins = new List<MaxDistance>();
-                    for (int j = start_index;j < arrs.Count;j++)
+                    for (int j = start_index; j < arrs.Count; j++)
                     {
                         var distance = Distance(item.lng, item.lat, arrs[j][0], arrs[j][1]);
                         mins.Add(new MaxDistance
@@ -285,7 +274,7 @@ namespace MapLib
                 var s = arrs[0];
                 double old_distance = 0;
                 int read_distance = sm;
-                for (int i = 1;i < arrs.Count;i++)
+                for (int i = 1; i < arrs.Count; i++)
                 {
                     var distance = Distance(s, arrs[i]);
                     old_distance += distance;
@@ -312,7 +301,7 @@ namespace MapLib
             else { m = Math.Round(m, 4); }
             var s = lines[0];
             var gpss = new List<double[]> { s };
-            for (int i = 1;i < lines.Length;i++)
+            for (int i = 1; i < lines.Length; i++)
             {
                 var distance = Distance(s, lines[i]);
                 double total = 0;
@@ -346,7 +335,7 @@ namespace MapLib
         static List<double[]> LineSubstring(this List<double[]> lines, int st, int et)
         {
             var lins = new List<double[]>();
-            for (int i = st;i < et;i++) lins.Add(lines[i]);
+            for (int i = st; i < et; i++) lins.Add(lines[i]);
             return lins;
         }
 
@@ -361,7 +350,7 @@ namespace MapLib
         static List<RoadStation> StationAuto(List<RoadStations> line, int m, int sm)
         {
             var list = new List<RoadStation>();
-            for (int i = 0;i < line.Count - 1;i++)
+            for (int i = 0; i < line.Count - 1; i++)
             {
                 list.AddRange(StationAVG(line[i], line[i].length, m, ref sm));
                 list.Add(new RoadStation
@@ -382,7 +371,7 @@ namespace MapLib
             var stationCount = total / _m;
             var m = t / stationCount;
             double[] s = line.lines[0];
-            for (int i = 1;i < line.lines.Count;i++)
+            for (int i = 1; i < line.lines.Count; i++)
             {
                 var e = line.lines[i];
                 old += Distance(s, e);
@@ -403,7 +392,7 @@ namespace MapLib
             var list = new List<RoadStation>();
             double old = 0;
             double[] s = line.lines[0];
-            for (int i = 1;i < line.lines.Count;i++)
+            for (int i = 1; i < line.lines.Count; i++)
             {
                 var e = line.lines[i];
                 old += Distance(s, e);
@@ -445,14 +434,10 @@ namespace MapLib
             if (_m.Contains("+") || _m.Contains("-") || _m.Contains("."))
             {
                 int index = -1;
-                if (_m.Contains("+"))
-                    index = _m.LastIndexOf("+");
-                else if (_m.Contains("-"))
-                    index = _m.LastIndexOf("-");
-                else
-                    index = _m.LastIndexOf(".");
-                if (int.TryParse(_m.Substring(0, index), out int _km_) && int.TryParse(_m.Substring(index + 1), out int _m_))
-                    return _km_ * 1000 + _m_;
+                if (_m.Contains("+")) index = _m.LastIndexOf("+");
+                else if (_m.Contains("-")) index = _m.LastIndexOf("-");
+                else index = _m.LastIndexOf(".");
+                if (int.TryParse(_m.Substring(0, index), out int _km_) && int.TryParse(_m.Substring(index + 1), out int _m_)) return _km_ * 1000 + _m_;
                 else return deVal;
             }
             if (int.TryParse(_m, out int _value)) return _value;
@@ -473,8 +458,7 @@ namespace MapLib
                 int index = mstr.LastIndexOf(".");
                 return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
             }
-            else
-                return "K" + mstr + join + "000";
+            else return "K" + mstr + join + "000";
         }
 
         /// <summary>
@@ -491,8 +475,7 @@ namespace MapLib
                 int index = mstr.LastIndexOf(".");
                 return "K" + mstr.Substring(0, index) + join + (mstr.Substring(index + 1).PadRight(3, '0'));
             }
-            else
-                return "K" + mstr + join + "000";
+            else return "K" + mstr + join + "000";
         }
 
         #endregion

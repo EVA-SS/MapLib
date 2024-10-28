@@ -1,21 +1,10 @@
-﻿//------------------------------------------------------------------------------
-//  此代码版权（除特别声明或在MapLib命名空间的代码）归作者本人Tom所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  Github源代码仓库：https://github.com/EVA-SS/MapLib
-//  Gitee源代码仓库：https://gitee.com/EVA-SS/MapLib
-//  QQ：17379620
-//  参考公式：http://www.movable-type.co.uk/scripts/latlong.html
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MapLib
 {
-    public static partial class Map
+    static partial class Map
     {
         /// <summary>
         /// 获取两点之间的距离
@@ -67,15 +56,13 @@ namespace MapLib
             {
                 var s = lines[0];
                 double total = 0;
-                for (int i = 1;i < lines.Count;i++)
+                for (int i = 1; i < lines.Count; i++)
                 {
                     total += Distance(s, lines[i]);
                     s = lines[i];
                 }
-
                 return total;
             }
-
             return 0;
         }
 
@@ -88,12 +75,11 @@ namespace MapLib
         {
             var s = lines[0];
             double total = 0;
-            for (int i = 1;i < lines.Length;i++)
+            for (int i = 1; i < lines.Length; i++)
             {
                 total += Distance(s, lines[i]);
                 s = lines[i];
             }
-
             return total;
         }
 
@@ -119,7 +105,6 @@ namespace MapLib
             catch
             {
             }
-
             station = null;
             return null;
         }
