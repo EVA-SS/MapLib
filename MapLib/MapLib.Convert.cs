@@ -16,9 +16,7 @@ namespace MapLib
         /// <returns>返回区域</returns>
         public static double[][] LineToRegion(this double[][] line, double range = 10)
         {
-            List<double[]> result = new List<double[]>(),
-                result_l = new List<double[]>(),
-                result_r = new List<double[]>();
+            List<double[]> result_l = new List<double[]>(line.Length), result_r = new List<double[]>(line.Length);
             double[]? old = null;
             for (int i = 1; i < line.Length; i++)
             {
@@ -38,7 +36,7 @@ namespace MapLib
                     }
                 }
             }
-
+            var result = new List<double[]>(result_l.Count + result_r.Count);
             result.AddRange(result_l);
             result.AddRange(result_r);
             return result.ToArray();

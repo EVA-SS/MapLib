@@ -216,7 +216,6 @@ namespace MapLib
             var readm = lines.Distance();
             var arrs = LineDense(lines, readm / 3);
             var list = new List<RoadStation>();
-            var has_div = new List<RoadStation>();
             if (station_div != null && station_div.Count > 1)
             {
                 var tempos = new List<RoadStations>();
@@ -235,10 +234,7 @@ namespace MapLib
                             index = j
                         });
                     }
-                    mins.Sort((x, y) =>
-                    {
-                        return x.distance.CompareTo(y.distance);
-                    });
+                    mins.Sort((x, y) => x.distance.CompareTo(y.distance));
                     var line_tmp = arrs.LineSubstring(start_index, mins[0].index);
                     if (line_tmp.Count > 0)
                     {
@@ -297,10 +293,10 @@ namespace MapLib
         /// <param name="m">密度（米）</param>
         static List<double[]> LineDense(double[][] lines, double m)
         {
-            if (m > 1) { m = 1; }
-            else { m = Math.Round(m, 4); }
+            if (m > 1) m = 1;
+            else m = Math.Round(m, 4);
             var s = lines[0];
-            var gpss = new List<double[]> { s };
+            var gpss = new List<double[]>(lines.Length) { s };
             for (int i = 1; i < lines.Length; i++)
             {
                 var distance = Distance(s, lines[i]);
@@ -334,7 +330,7 @@ namespace MapLib
         /// <param name="et">结束位置</param>
         static List<double[]> LineSubstring(this List<double[]> lines, int st, int et)
         {
-            var lins = new List<double[]>();
+            var lins = new List<double[]>(et);
             for (int i = st; i < et; i++) lins.Add(lines[i]);
             return lins;
         }
@@ -349,7 +345,7 @@ namespace MapLib
         /// <param name="sm">开始桩号</param>
         static List<RoadStation> StationAuto(List<RoadStations> line, int m, int sm)
         {
-            var list = new List<RoadStation>();
+            var list = new List<RoadStation>(line.Count);
             for (int i = 0; i < line.Count - 1; i++)
             {
                 list.AddRange(StationAVG(line[i], line[i].length, m, ref sm));
@@ -366,7 +362,7 @@ namespace MapLib
         static List<RoadStation> StationAVG(RoadStations line, int total, int _m, ref int sm)
         {
             sm = line.st;
-            var list = new List<RoadStation>();
+            var list = new List<RoadStation>(line.lines.Count);
             double old = 0, t = line.lines.Distance();
             var stationCount = total / _m;
             var m = t / stationCount;
@@ -389,7 +385,7 @@ namespace MapLib
         static List<RoadStation> StationPlain(RoadStations line, int m, ref int sm)
         {
             sm = line.st;
-            var list = new List<RoadStation>();
+            var list = new List<RoadStation>(line.lines.Count);
             double old = 0;
             double[] s = line.lines[0];
             for (int i = 1; i < line.lines.Count; i++)

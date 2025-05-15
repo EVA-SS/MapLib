@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MapLib
 {
@@ -93,12 +92,12 @@ namespace MapLib
         {
             try
             {
-                var lnglatMs = new List<LngLatM>();
+                var lnglatMs = new List<LngLatM>(line.Count);
                 foreach (var item in line) lnglatMs.Add(new LngLatM(current.Distance(item), item));
-                var _lnglatMs = lnglatMs.OrderBy(x => x.m);
-                var find = _lnglatMs.First(); //最近点
-                var find2 = _lnglatMs.Take(2).Last(); //第二点
-                if (find.lnglat.m > find2.lnglat.m) station = (int)Math.Round(find.lnglat.m - find.m);
+                bool flag = lnglatMs[0].lnglat.m > lnglatMs[1].lnglat.m;
+                lnglatMs.Sort((x, y) => x.m.CompareTo(y.m));
+                LngLatM find = lnglatMs[0], find2 = lnglatMs[1];
+                if (flag && find.lnglat.m > find2.lnglat.m) station = (int)Math.Round(find.lnglat.m - find.m);
                 else station = (int)Math.Round(find.lnglat.m + find.m);
                 return find.lnglat;
             }
