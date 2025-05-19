@@ -92,12 +92,11 @@ namespace MapLib
         {
             try
             {
-                var lnglatMs = new List<LngLatM>(line.Count);
+                var lnglatMs = new List<LngLatM>(line.Count + 1);
                 foreach (var item in line) lnglatMs.Add(new LngLatM(current.Distance(item), item));
-                bool flag = lnglatMs[0].lnglat.m > lnglatMs[1].lnglat.m;
                 lnglatMs.Sort((x, y) => x.m.CompareTo(y.m));
                 LngLatM find = lnglatMs[0], find2 = lnglatMs[1];
-                if (flag && find.lnglat.m > find2.lnglat.m) station = (int)Math.Round(find.lnglat.m - find.m);
+                if (find.lnglat.m > find2.lnglat.m) station = (int)Math.Round(find.lnglat.m - find.m);
                 else station = (int)Math.Round(find.lnglat.m + find.m);
                 return find.lnglat;
             }
